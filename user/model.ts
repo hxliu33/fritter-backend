@@ -1,5 +1,6 @@
 import type {Types} from 'mongoose';
 import {Schema, model} from 'mongoose';
+import type {Group} from '../group/model';
 
 /**
  * This file defines the properties stored in a User
@@ -12,6 +13,16 @@ export type User = {
   username: string;
   password: string;
   dateJoined: Date;
+  groups?: Array<Types.ObjectId>;
+};
+
+// Type definition for User on the backend
+export type PopulatedUser = {
+  _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
+  username: string;
+  password: string;
+  dateJoined: Date;
+  groups?: Array<Group>;
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -32,8 +43,18 @@ const UserSchema = new Schema({
   dateJoined: {
     type: Date,
     required: true
-  }
+  },
 });
 
+// (virtual-population)
+// Auto-populate a User.groups field with any groups associated with this user such that User._id === Group.members._id
+UserSchema.virtual('groups', {
+  ref: 'Group',
+  localField: '_id',
+  foreignField: 'members'
+});
+
+UserSchema.set('toObject', {getters:true});
+UserSchema.set('toJSON', {getters:true});
 const UserModel = model<User>('User', UserSchema);
 export default UserModel;

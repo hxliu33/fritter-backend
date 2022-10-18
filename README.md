@@ -192,6 +192,17 @@ This renders the `index.html` file that will be used to interact with the backen
 - `400` if `author` is not given
 - `404` if `author` is not a recognized username of any user
 
+#### `GET /api/freets/:freetId/isAnon` - Get anonymity setting of freet
+
+**Returns**
+
+- A boolean saying whether the freet is anonymous
+
+**Throws**
+
+- `400` if `freetId` is not given
+- `404` if `freetId` is invalid
+
 #### `POST /api/freets` - Create a new freet
 
 **Body**
@@ -240,6 +251,20 @@ This renders the `index.html` file that will be used to interact with the backen
 - `400` if the new freet content is empty or a stream of empty spaces
 - `413` if the new freet content is more than 140 characters long
 
+#### `PUT /api/freets/:freetId?isAnon=BOOLEAN` - Update an existing freet's anonymity setting
+
+**Returns**
+
+- A success message
+- An object with the freet and its updated anonymity setting
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the freetId is invalid
+- `403` if the user is not the author of the freet
+
+
 #### `POST /api/users/session` - Sign in user
 
 **Body**
@@ -268,7 +293,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if user is not logged in
 
-#### `POST /api/users` - Create an new user account
+#### `POST /api/users` - Create a new user account
 
 **Body**
 
@@ -313,3 +338,263 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
+
+#### `GET /api/groups?member=USERNAME` - Get all groups that a user is a member of
+
+**Returns**
+
+- An array of groups that a user with username `member` is a part of
+
+**Throws**
+
+- `400` if `member` is not given
+- `404` if `member` is not a recognized username of any user
+
+#### `GET /api/groups/:groupId/members` - Get all members of a group
+
+**Returns**
+
+- An array of users that are members of the group
+
+**Throws**
+
+- `404` if the groupId is not found
+- `403` if the user is not a member of the group
+- `403` if the user is not logged in
+
+#### `GET /api/groups?admin=USERNAME` - Get all groups that a user is an admin of
+
+**Returns**
+
+- An array of groups that a user with username `admin` is an administrator of
+
+**Throws**
+
+- `400` if `admin` is not given
+- `404` if `admin` is not a recognized username of any user
+
+#### `GET /api/groups/:groupId/admin` - Get all administrators of a group
+
+**Returns**
+
+- An array of users that are administrators of the group
+
+**Throws**
+
+- `404` if the groupId is not found
+- `403` if the user is not a member of the group
+- `403` if the user is not logged in
+
+#### `POST /api/groups` - Create a new group
+
+**Body**
+
+- `name` _{string}_ - The group's name
+
+**Returns**
+
+- A success message
+- An object with the created group's details with the user as the only admin and member
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `DELETE /api/groups/:groupId?` - Delete user
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `403` if the user is not an administrator of the group
+
+#### `PUT /api/groups/:groupId/members?member=USERNAME` - Update an existing group with a new member
+
+**Returns**
+
+- A success message
+- An object with the updated group
+
+**Throws**
+
+- `404` if the groupId is not found
+- `404` if `member` is not a recognized username of any user
+- `400` if `member` is not given
+- `403` if the user is not a member of the group and the group is public or if the user is not an admin of the group and the group is private
+- `403` if the user is not logged in
+
+#### `PUT /api/groups/:groupId/admin?admin=USERNAME` - Update an existing group with a new administrator
+
+**Returns**
+
+- A success message
+- An object with the updated group
+
+**Throws**
+
+- `404` if the groupId is not found
+- `404` if `admin` is not a recognized username of any user
+- `400` if `admin` is not given
+- `403` if `admin` is not a member of the group
+- `403` if the user is not an admin of the group
+- `403` if the user is not logged in
+
+#### `PUT /api/groups/:groupId?private=BOOLEAN` - Update an existing group with a new privacy setting
+
+**Returns**
+
+- A success message
+- An object with the group and its updated privacy setting
+
+**Throws**
+
+- `404` if the groupId is not found
+- `403` if the user is not an admin of the group
+- `403` if the user is not logged in
+
+#### `GET /api/font` - Get current font being used
+
+**Returns**
+
+- A string of the name of the current font being used
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `GET /api/font/list` - Get list of potential fonts available to user
+
+**Returns**
+
+- An array of strings of the names of the potential fonts to use
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `POST /api/font/list` - Create a new list of fonts available to the user
+
+**Body**
+
+- `fonts` _{string[]}_ - The list of fonts available to the user
+
+**Returns**
+
+- A success message
+- An object with the created font list's details
+
+**Throws**
+
+- `403` if the user is not logged in
+- `409` if user already has a list of fonts available to them
+
+#### `DELETE /api/font` - Delete font
+
+**Body**
+
+- `font` _{string}_ - The name of the font to delete
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the font is not found in the list of available fonts
+
+#### `PUT /api/font/current` - Update the current font with a new one
+
+**Body**
+
+- `font` _{string}_ - The name of the font to replace the current one with
+
+**Returns**
+
+- A success message
+- An object with the new font
+
+**Throws**
+
+- `404` if the font is not found
+- `403` if the user is not logged in
+- `409` if the current font already is the new font
+
+#### `PUT /api/font/new` - Update the list of available fonts with a new one
+
+**Body**
+
+- `font` _{string}_ - The name of the font to add to the list of available ones
+
+**Returns**
+
+- A success message
+- An object with the list of fonts available to the user
+
+**Throws**
+
+- `404` if the font is invalid
+- `403` if the user is not logged in
+- `409` if the font is already in the list of available fonts
+
+#### `GET /api/pause` - Get the pause setting
+
+**Returns**
+
+- An object with the number of minutes the user has been active and the time threshold that the user wants to be active for before receiving a pause notification
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `POST /api/pause` - Create a new pause setting
+
+**Body**
+
+- `minutesActive` _{number}_ - The number of minutes the user has been active in their current session
+- `threshold` _{number}_ - The number of minutes the user wants to be active in their current session before receiving a pause notification
+
+**Returns**
+
+- A success message
+- A object with the created pause setting
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if `minutesActive` or `threshold` is empty or not a number
+
+#### `PUT /api/pause/minutesActive` - Update an existing pause setting with the amount of time the user has been active in their current session
+
+**Body**
+
+- `minutes` _{number}_ - The number of minutes the user has been active in their current session
+
+**Returns**
+
+- A success message
+- An object with the updated pause setting
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if `minutes` is invalid
+
+#### `PUT /api/pause/threshold` - Update an existing pause setting with the time threshold the user wants to be active for before receiving a notification
+
+**Body**
+
+- `minutes` _{number}_ - The number of minutes the user wants to be active in their current session before receiving a pause notification
+
+**Returns**
+
+- A success message
+- An object with the updated pause setting
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if `time` is invalid

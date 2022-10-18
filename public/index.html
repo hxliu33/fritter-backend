@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/stylesheets/style.css">
   <script src="/scripts/freet.js"></script>
+  <script src="/scripts/group.js"></script>
+  <script src="/scripts/pause.js"></script>
   <script src="/scripts/user.js"></script>
   <script src="/scripts/index.js"></script>
 </head>
@@ -116,6 +118,51 @@
             <input id="id" name="id">
           </div>
           <input type="submit" value="Delete Freet">
+        </form>
+
+        <form id="create-pause">
+          <h3>Create Pause</h3>
+          <div>
+            <label for="minutesActive">Minutes Active:</label>
+            <input id="minutesActive" name="minutesActive">
+          </div>
+          <div>
+            <label for="threshold">Threshold:</label>
+            <input id="threshold" name="threshold">
+          </div>
+          <input type="submit" value="Create Pause">
+        </form>
+
+        <form id="view-pause">
+          <h3>View User's Pause Setting</h3>
+          <input type="submit" value="View Pause">
+        </form>
+
+        <form id="change-minutes-active">
+          <h3>Change Minutes Active</h3>
+          <div>
+            <label for="minutes">Minutes Active:</label>
+            <input id="minutes" name="minutes">
+          </div>
+          <input type="submit" value="Change Minutes Active">
+        </form>
+
+        <form id="change-threshold">
+          <h3>Change Threshold</h3>
+          <div>
+            <label for="minutes">Threshold:</label>
+            <input id="minutes" name="minutes">
+          </div>
+          <input type="submit" value="Change Threshold">
+        </form>
+
+        <form id="create-group">
+          <h3>Create Group</h3>
+          <div>
+            <label for="name">Name:</label>
+            <input id="name" name="name">
+          </div>
+          <input type="submit" value="Create Group">
         </form>
       </div>
     </section>

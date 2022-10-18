@@ -1,4 +1,4 @@
-import type {HydratedDocument, Types} from 'mongoose';
+import type {HydratedDocument, Schema, Types} from 'mongoose';
 import type {User} from './model';
 import UserModel from './model';
 

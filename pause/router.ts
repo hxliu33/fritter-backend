@@ -14,11 +14,13 @@ const router = express.Router();
  *
  * @return {PauseResponse} - A pause setting
  * @throws {403} - If the user is not logged in
+ * @throws {404} - If the user does not have an existing pause setting
  */
 router.get(
   '/',
   [
     userValidator.isUserLoggedIn,
+    pauseValidator.isPauseExists,
   ],
   async (req: Request, res: Response) => {
     const pause = await PauseCollection.findOneByUserId(req.session.userId as string);

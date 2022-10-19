@@ -69,7 +69,7 @@ router.post(
  * @throws {400} - If time is empty or not a number
  */
 router.put(
-  '/',
+  '/minutesActive',
   [
     userValidator.isUserLoggedIn,
     pauseValidator.isValidTime,
@@ -97,7 +97,7 @@ router.put(
  * @throws {400} - If time is empty or not a number
  */
  router.put(
-    '/',
+    '/threshold',
     [
       userValidator.isUserLoggedIn,
       pauseValidator.isValidTime,

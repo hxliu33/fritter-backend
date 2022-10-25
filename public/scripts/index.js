@@ -36,14 +36,22 @@ const formsAndHandlers = {
   'sign-out': signOut,
   'view-all-freets': viewAllFreets,
   'view-freets-by-author': viewFreetsByAuthor,
+  'view-anonymity-of-freet': viewAnon,
   'create-freet': createFreet,
   'edit-freet': editFreet,
+  'edit-freet-anon': editFreetAnon,
   'delete-freet': deleteFreet,
   'create-group': createGroup,
   'create-pause': createPause,
   'view-pause': viewPause,
   'change-minutes-active': editPauseMinutesActive,
   'change-threshold': editPauseThreshold,
+  'create-fontswitch': createFontSwitch,
+  'view-current-font': viewCurrentFont,
+  'view-font-list': viewFontList,
+  'change-fontlist-remove': editFontRemove,
+  'change-current-font': changeCurrentFont,
+  'change-fontlist-add': editFontAdd,
 };
 
 // Attach handlers to forms

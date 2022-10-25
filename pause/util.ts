@@ -5,8 +5,8 @@ import type {Pause, PopulatedPause} from '../pause/model';
 type PauseResponse = {
   _id: string;
   user: string;
-  minutesActive: string;
-  threshold: string;
+  minutesActive: number;
+  threshold: number;
 };
 
 /**
@@ -28,8 +28,6 @@ const constructPauseResponse = (pause: HydratedDocument<Pause>): PauseResponse =
     ...pauseCopy,
     _id: pauseCopy._id.toString(),
     user: username,
-    minutesActive: String(pauseCopy.minutesActive),
-    threshold: String(pauseCopy.threshold),
   };
 };
 

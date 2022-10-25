@@ -4,6 +4,7 @@ import FreetCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as freetValidator from '../freet/middleware';
 import * as util from './util';
+import UserCollection from '../user/collection';
 
 const router = express.Router();
 
@@ -27,6 +28,9 @@ const router = express.Router();
  */
 router.get(
   '/',
+  [
+    userValidator.isUserLoggedIn,
+  ],
   async (req: Request, res: Response, next: NextFunction) => {
     // Check if authorId query parameter was supplied
     if (req.query.author !== undefined) {
@@ -39,10 +43,12 @@ router.get(
     res.status(200).json(response);
   },
   [
-    userValidator.isAuthorExists
+    userValidator.isAuthorExists,
   ],
   async (req: Request, res: Response) => {
-    const authorFreets = await FreetCollection.findAllByUsername(req.query.author as string);
+    const user = await UserCollection.findOneByUserId(req.session.userId);
+    const userIsNotAuthor = (user.username !== req.query.author as string);
+    const authorFreets = await FreetCollection.findAllByUsername(req.query.author as string, userIsNotAuthor);
     const response = authorFreets.map(util.constructFreetResponse);
     res.status(200).json(response);
   }
@@ -54,6 +60,7 @@ router.get(
  * @name POST /api/freets
  *
  * @param {string} content - The content of the freet
+ * @param {string} isAnon - The anonymity setting of the freet
  * @return {FreetResponse} - The created freet
  * @throws {403} - If the user is not logged in
  * @throws {400} - If the freet content is empty or a stream of empty spaces
@@ -63,11 +70,13 @@ router.post(
   '/',
   [
     userValidator.isUserLoggedIn,
-    freetValidator.isValidFreetContent
+    freetValidator.isValidFreetContent,
+    freetValidator.isValidFreetSetting,
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const freet = await FreetCollection.addOne(userId, req.body.content);
+    const isAnon = (req.body.isAnon == "true") ?? false; //default for empty space is false anonymity setting
+    const freet = await FreetCollection.addOne(userId, req.body.content, isAnon);
 
     res.status(201).json({
       message: 'Your freet was created successfully.',
@@ -102,7 +111,7 @@ router.delete(
 );
 
 /**
- * Modify a freet
+ * Modify a freet's content
  *
  * @name PUT /api/freets/:id
  *
@@ -114,20 +123,54 @@ router.delete(
  * @throws {400} - If the freet content is empty or a stream of empty spaces
  * @throws {413} - If the freet content is more than 140 characters long
  */
+/**
+ * Modify a freet's anonymity setting
+ *
+ * @name PUT /api/freets/:id?isAnon=BOOLEAN
+ *
+ * @return {FreetResponse} - the updated freet
+ * @throws {403} - if the user is not logged in or not the author of
+ *                 of the freet
+ * @throws {404} - If the freetId is not valid
+ */
 router.put(
   '/:freetId?',
   [
     userValidator.isUserLoggedIn,
     freetValidator.isFreetExists,
     freetValidator.isValidFreetModifier,
-    freetValidator.isValidFreetContent
+  ],
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Check if isAnon query parameter was supplied
+    if (req.query.isAnon !== undefined) {
+      next();
+      return;
+    }
+
+   freetValidator.isValidFreetContent;
+   const freet = await FreetCollection.updateOne(req.params.freetId, req.body.content);
+   res.status(200).json({
+     message: 'Your freet was updated successfully.',
+     freet: util.constructFreetResponse(freet)
+   });
+  },
+  [
+    freetValidator.isValidFreetSetting,
   ],
   async (req: Request, res: Response) => {
-    const freet = await FreetCollection.updateOne(req.params.freetId, req.body.content);
-    res.status(200).json({
-      message: 'Your freet was updated successfully.',
-      freet: util.constructFreetResponse(freet)
-    });
+    const anonymity = req.body.isAnon as string;
+    if (anonymity.trim() !== "") {
+      const freet = await FreetCollection.updateOneAnonymity(req.params.freetId, (anonymity == "true"));
+      res.status(200).json({
+        message: 'Your freet anonymity setting was updated successfully.',
+        freet: util.constructFreetResponse(freet)
+      });
+    } else {
+      res.status(412).json({
+        message: 'No update provided for your freet anonymity setting.',
+      })
+    }
+    
   }
 );
 

@@ -17,15 +17,17 @@ class FreetCollection {
    *
    * @param {string} authorId - The id of the author of the freet
    * @param {string} content - The id of the content of the freet
+   * @param {boolean} isAnon - The anonymity setting of the freet
    * @return {Promise<HydratedDocument<Freet>>} - The newly created freet
    */
-  static async addOne(authorId: Types.ObjectId | string, content: string): Promise<HydratedDocument<Freet>> {
+  static async addOne(authorId: Types.ObjectId | string, content: string, isAnon: boolean): Promise<HydratedDocument<Freet>> {
     const date = new Date();
     const freet = new FreetModel({
       authorId,
       dateCreated: date,
       content,
-      dateModified: date
+      dateModified: date,
+      isAnonymous: isAnon,
     });
     await freet.save(); // Saves freet to MongoDB
     return freet.populate('authorId');
@@ -55,11 +57,16 @@ class FreetCollection {
    * Get all the freets in by given author
    *
    * @param {string} username - The username of author of the freets
+   * @param {boolean} getNonAnon - Whether we want to get the non-anonymous freets or all of them
    * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
    */
-  static async findAllByUsername(username: string): Promise<Array<HydratedDocument<Freet>>> {
+  static async findAllByUsername(username: string, getNonAnon: boolean = false): Promise<Array<HydratedDocument<Freet>>> {
     const author = await UserCollection.findOneByUsername(username);
-    return FreetModel.find({authorId: author._id}).populate('authorId');
+    if (getNonAnon) { //only gets non-anonymous freets
+      return FreetModel.find({authorId: author._id, isAnonymous: false}).sort({dateModified: -1}).populate('authorId');
+    } else {
+      return FreetModel.find({authorId: author._id}).sort({dateModified: -1}).populate('authorId');
+    }
   }
 
   /**
@@ -72,6 +79,21 @@ class FreetCollection {
   static async updateOne(freetId: Types.ObjectId | string, content: string): Promise<HydratedDocument<Freet>> {
     const freet = await FreetModel.findOne({_id: freetId});
     freet.content = content;
+    freet.dateModified = new Date();
+    await freet.save();
+    return freet.populate('authorId');
+  }
+
+  /**
+   * Update a freet with the new anonymity setting
+   *
+   * @param {string} freetId - The id of the freet to be updated
+   * @param {boolean} isAnon - The new anonymity setting of the freet
+   * @return {Promise<HydratedDocument<Freet>>} - The newly updated freet
+   */
+   static async updateOneAnonymity(freetId: Types.ObjectId | string, isAnon: boolean): Promise<HydratedDocument<Freet>> {
+    const freet = await FreetModel.findOne({_id: freetId});
+    freet.isAnonymous = isAnon;
     freet.dateModified = new Date();
     await freet.save();
     return freet.populate('authorId');

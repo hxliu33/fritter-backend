@@ -11,6 +11,7 @@ import dotenv from 'dotenv';
 import * as userValidator from '../user/middleware';
 import {userRouter} from '../user/router';
 import {freetRouter} from '../freet/router';
+import {fontSwitchRouter} from '../fontswitch/router';
 import {groupRouter} from '../group/router';
 import {pauseRouter} from '../pause/router';
 
@@ -78,6 +79,7 @@ app.get('/', (req: Request, res: Response) => {
 // Add routers from routes folder
 app.use('/api/users', userRouter);
 app.use('/api/freets', freetRouter);
+app.use('/api/font', fontSwitchRouter);
 app.use('/api/groups', groupRouter);
 app.use('/api/pause', pauseRouter);
 

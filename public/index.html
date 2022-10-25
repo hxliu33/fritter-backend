@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/stylesheets/style.css">
   <script src="/scripts/freet.js"></script>
+  <script src="/scripts/fontswitch.js"></script>
   <script src="/scripts/group.js"></script>
   <script src="/scripts/pause.js"></script>
   <script src="/scripts/user.js"></script>
@@ -89,11 +90,24 @@
           <input type="submit" value="View Freets By Author">
         </form>
 
+        <form id="view-anonymity-of-freet">
+          <h3>View Freet Anonymity Setting</h3>
+          <div>
+            <label for="id">ID:</label>
+            <input id="id" name="id">
+          </div>
+          <input type="submit" value="View Anonymity Setting">
+        </form>
+
         <form id="create-freet">
           <h3>Create Freet</h3>
           <div>
             <label for="content">Content:</label>
             <textarea id="content" name="content"></textarea>
+          </div>
+          <div>
+            <label for="isAnon">Anonymity Setting (true/false):</label>
+            <input id="isAnon" name="isAnon"></input>
           </div>
           <input type="submit" value="Create Freet">
         </form>
@@ -109,6 +123,19 @@
             <textarea id="content" name="content"></textarea>
           </div>
           <input type="submit" value="Edit Freet">
+        </form>
+
+        <form id="edit-freet-anon">
+          <h3>Edit Freet Anonymity Setting</h3>
+          <div>
+            <label for="id">ID:</label>
+            <input id="id" name="id">
+          </div>
+          <div>
+            <label for="isAnon">Anonymous (true/false):</label>
+            <textarea id="isAnon" name="isAnon"></textarea>
+          </div>
+          <input type="submit" value="Edit Freet Anonymity">
         </form>
 
         <form id="delete-freet">
@@ -154,6 +181,52 @@
             <input id="minutes" name="minutes">
           </div>
           <input type="submit" value="Change Threshold">
+        </form>
+
+        <form id="create-fontswitch">
+          <h3>Create Font Switch Setting</h3>
+          <div>
+            <label for="fonts">Font List (separate with commas):</label>
+            <input id="fonts" name="fonts">
+          </div>
+          <input type="submit" value="Create Font Switch">
+        </form>
+
+        <form id="view-current-font">
+          <h3>View User's Current Font</h3>
+          <input type="submit" value="View Current Font">
+        </form>
+
+        <form id="view-font-list">
+          <h3>View User's List of Potential Fonts</h3>
+          <input type="submit" value="View Font List">
+        </form>
+
+        <form id="change-fontlist-remove">
+          <h3>Remove Font from Potential Fonts List</h3>
+          <div>
+            <label for="font">Font to Remove:</label>
+            <input id="font" name="font">
+          </div>
+          <input type="submit" value="Remove Font">
+        </form>
+
+        <form id="change-current-font">
+          <h3>Change User's Current Font</h3>
+          <div>
+            <label for="font">Font to Use:</label>
+            <input id="font" name="font">
+          </div>
+          <input type="submit" value="Use Font">
+        </form>
+
+        <form id="change-fontlist-add">
+          <h3>Add Font to Potential Fonts List</h3>
+          <div>
+            <label for="font">Font to Add:</label>
+            <input id="font" name="font">
+          </div>
+          <input type="submit" value="Add Font">
         </form>
 
         <form id="create-group">

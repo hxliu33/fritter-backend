@@ -208,6 +208,7 @@ This renders the `index.html` file that will be used to interact with the backen
 **Body**
 
 - `content` _{string}_ - The content of the freet
+- `isAnon` _{boolean}_ - Whether the freet is anonymous
 
 **Returns**
 
@@ -219,6 +220,7 @@ This renders the `index.html` file that will be used to interact with the backen
 - `403` if the user is not logged in
 - `400` If the freet content is empty or a stream of empty spaces
 - `413` If the freet content is more than 140 characters long
+- `412` If the anonymity setting is not a boolean true/false
 
 #### `DELETE /api/freets/:freetId?` - Delete an existing freet
 
@@ -385,6 +387,18 @@ This renders the `index.html` file that will be used to interact with the backen
 - `403` if the user is not a member of the group
 - `403` if the user is not logged in
 
+#### `GET /api/groups/:groupId/posts` - Get all posts of a group
+
+**Returns**
+
+- An array of posts within the group sorted in descending order by date modified
+
+**Throws**
+
+- `404` if the groupId is not found
+- `403` if the user is not a member of the group
+- `403` if the user is not logged in
+
 #### `POST /api/groups` - Create a new group
 
 **Body**
@@ -400,7 +414,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if the user is not logged in
 
-#### `DELETE /api/groups/:groupId?` - Delete user
+#### `DELETE /api/groups/:groupId?` - Delete group
 
 **Returns**
 
@@ -464,6 +478,7 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
+- `404` if the user does not have an existing font switch setting
 
 #### `GET /api/font/list` - Get list of potential fonts available to user
 
@@ -474,12 +489,13 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
+- `404` if the user does not have an existing font switch setting
 
 #### `POST /api/font/list` - Create a new list of fonts available to the user
 
 **Body**
 
-- `fonts` _{string[]}_ - The list of fonts available to the user
+- `fonts` _{string}_ - The comma-delineated list of fonts available to the user
 
 **Returns**
 
@@ -491,7 +507,7 @@ This renders the `index.html` file that will be used to interact with the backen
 - `403` if the user is not logged in
 - `409` if user already has a list of fonts available to them
 
-#### `DELETE /api/font` - Delete font
+#### `PUT /api/font/remove` - Update the list of available fonts to remove one
 
 **Body**
 
@@ -500,11 +516,13 @@ This renders the `index.html` file that will be used to interact with the backen
 **Returns**
 
 - A success message
+- An object with the updated list of potential fonts
 
 **Throws**
 
 - `403` if the user is not logged in
-- `404` if the font is not found in the list of available fonts
+- `404` if the font is empty or not found in the list of available fonts
+- `409` if font to remove is the current font
 
 #### `PUT /api/font/current` - Update the current font with a new one
 
@@ -519,7 +537,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `404` if the font is not found
+- `404` if the font is empty or not found
 - `403` if the user is not logged in
 - `409` if the current font already is the new font
 
@@ -536,7 +554,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `404` if the font is invalid
+- `404` if the font is empty
 - `403` if the user is not logged in
 - `409` if the font is already in the list of available fonts
 

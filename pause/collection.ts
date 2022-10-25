@@ -44,7 +44,7 @@ class PauseCollection {
    * Find a pause setting by userId
    *
    * @param {string} userId - The userId of the pause setting to find
-   * @return {Promise<HydratedDocument<Pause>> | Promise<null> } - The pause setting with the given pauseId, if any
+   * @return {Promise<HydratedDocument<Pause>> | Promise<null> } - The pause setting associated with the user, if any
    */
    static async findOneByUserId(userId: Types.ObjectId | string): Promise<HydratedDocument<Pause>> {
     const user = await UserCollection.findOneByUserId(userId);
@@ -56,7 +56,7 @@ class PauseCollection {
    *
    * @param {string} pauseId - The id of the pause setting to be updated
    * @param {number} minutesActive - The new minutes active of the user
-   * @return {Promise<HydratedDocument<Freet>>} - The newly updated pause setting
+   * @return {Promise<HydratedDocument<Pause>>} - The newly updated pause setting
    */
   static async updateOne(pauseId: Types.ObjectId | string, minutesActive: number): Promise<HydratedDocument<Pause>> {
     const pause = await PauseModel.findOne({_id: pauseId});
@@ -70,7 +70,7 @@ class PauseCollection {
    *
    * @param {string} pauseId - The id of the pause setting to be updated
    * @param {number} threshold - The new time threshold the user would like
-   * @return {Promise<HydratedDocument<Freet>>} - The newly updated pause setting
+   * @return {Promise<HydratedDocument<Pause>>} - The newly updated pause setting
    */
    static async updateOneThreshold(pauseId: Types.ObjectId | string, threshold: number): Promise<HydratedDocument<Pause>> {
     const pause = await PauseModel.findOne({_id: pauseId});

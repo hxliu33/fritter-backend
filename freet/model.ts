@@ -55,6 +55,7 @@ const FreetSchema = new Schema<Freet>({
   // Whether the freet is anonymous or not
   isAnonymous: {
     type: Boolean,
+    required: true
   }
 });
 

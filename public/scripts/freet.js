@@ -17,12 +17,6 @@ function viewFreetsByAuthor(fields) {
     .catch(showResponse);
 }
 
-function viewAnon(fields) {
-  fetch(`/api/freets/${fields.id}/isAnon`)
-    .then(showResponse)
-    .catch(showResponse);
-}
-
 function createFreet(fields) {
   fetch('/api/freets', {method: 'POST', body: JSON.stringify(fields), headers: {'Content-Type': 'application/json'}})
     .then(showResponse)

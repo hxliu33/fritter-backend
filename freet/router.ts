@@ -64,6 +64,7 @@ router.get(
  * @return {FreetResponse} - The created freet
  * @throws {403} - If the user is not logged in
  * @throws {400} - If the freet content is empty or a stream of empty spaces
+ * @throws {412} - If the anonymity setting is not valid
  * @throws {413} - If the freet content is more than 140 characters long
  */
 router.post(
@@ -132,6 +133,7 @@ router.delete(
  * @throws {403} - if the user is not logged in or not the author of
  *                 of the freet
  * @throws {404} - If the freetId is not valid
+ * @throws {412} - If the anonymity setting is not valid
  */
 router.put(
   '/:freetId?',
@@ -139,6 +141,7 @@ router.put(
     userValidator.isUserLoggedIn,
     freetValidator.isFreetExists,
     freetValidator.isValidFreetModifier,
+    freetValidator.isValidFreetContent,
   ],
   async (req: Request, res: Response, next: NextFunction) => {
     // Check if isAnon query parameter was supplied
@@ -155,10 +158,10 @@ router.put(
    });
   },
   [
-    freetValidator.isValidFreetSetting,
+    freetValidator.isValidFreetSettingQuery,
   ],
   async (req: Request, res: Response) => {
-    const anonymity = req.body.isAnon as string;
+    const anonymity = req.query.isAnon as string;
     if (anonymity.trim() !== "") {
       const freet = await FreetCollection.updateOneAnonymity(req.params.freetId, (anonymity == "true"));
       res.status(200).json({

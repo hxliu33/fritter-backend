@@ -36,7 +36,6 @@ const formsAndHandlers = {
   'sign-out': signOut,
   'view-all-freets': viewAllFreets,
   'view-freets-by-author': viewFreetsByAuthor,
-  'view-anonymity-of-freet': viewAnon,
   'create-freet': createFreet,
   'edit-freet': editFreet,
   'edit-freet-anon': editFreetAnon,
@@ -52,6 +51,15 @@ const formsAndHandlers = {
   'change-fontlist-remove': editFontRemove,
   'change-current-font': changeCurrentFont,
   'change-fontlist-add': editFontAdd,
+  'create-group': createGroup,
+  'view-group': viewGroup,
+  'view-member-groups': viewGroupsMember,
+  'view-admin-groups': viewGroupsAdmin,
+  'add-member': editGroupMember,
+  'add-admin': editGroupAdmin,
+  'add-post': editGroupPost,
+  'change-privacy': editGroupPrivacy,
+  'delete-group': deleteGroup,
 };
 
 // Attach handlers to forms

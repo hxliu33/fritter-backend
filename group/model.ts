@@ -1,7 +1,7 @@
-import { Freet } from 'freet/model';
+import { Freet } from '../freet/model';
 import type {Types} from 'mongoose';
 import {Schema, model} from 'mongoose';
-import type { User } from 'user/model';
+import type { User } from '../user/model';
 
 /**
  * This file defines the properties stored in a User

@@ -45,5 +45,6 @@ const constructFreetResponse = (freet: HydratedDocument<Freet>): FreetResponse =
 };
 
 export {
-  constructFreetResponse
+  constructFreetResponse,
+  FreetResponse,
 };

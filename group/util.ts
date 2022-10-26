@@ -1,12 +1,15 @@
+import { constructFreetResponse, FreetResponse } from '../freet/util';
 import type {HydratedDocument} from 'mongoose';
-import type {Group, PopulatedGroup} from './model';
+import type {Group, PopulatedGroup} from '../group/model';
 
-// Update this if you add a property to the User type!
+// Update this if you add a property to the Group type!
 type GroupResponse = {
   _id: string;
   name: string;
   administrators: string[];
-  members: string[]
+  members: string[];
+  posts: FreetResponse[];
+  isPrivate: boolean;
 };
 
 /**
@@ -22,15 +25,16 @@ const constructGroupResponse = (group: HydratedDocument<Group>): GroupResponse =
       versionKey: false // Cosmetics; prevents returning of __v property
     })
   };
-  const administrators = groupCopy.administrators.map(admin => admin.username);
-  const members = groupCopy.members.map(member => member.username);
+  const administrators = groupCopy.administrators.map((admin) => admin.username);
+  const members = groupCopy.members.map((member) => member.username);
   delete groupCopy.administrators;
   delete groupCopy.members;
   return {
     ...groupCopy,
     _id: groupCopy._id.toString(),
     administrators: administrators,
-    members: members
+    members: members,
+    posts: groupCopy.posts.map(constructFreetResponse),
   };
 };
 

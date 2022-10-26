@@ -192,17 +192,6 @@ This renders the `index.html` file that will be used to interact with the backen
 - `400` if `author` is not given
 - `404` if `author` is not a recognized username of any user
 
-#### `GET /api/freets/:freetId/isAnon` - Get anonymity setting of freet
-
-**Returns**
-
-- A boolean saying whether the freet is anonymous
-
-**Throws**
-
-- `400` if `freetId` is not given
-- `404` if `freetId` is invalid
-
 #### `POST /api/freets` - Create a new freet
 
 **Body**
@@ -341,22 +330,21 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if the user is not logged in
 
-#### `GET /api/groups?member=USERNAME` - Get all groups that a user is a member of
+#### `GET /api/groups/member` - Get all groups that the user is a member of
 
 **Returns**
 
-- An array of groups that a user with username `member` is a part of
+- An array of groups that the user is a part of
 
 **Throws**
 
-- `400` if `member` is not given
-- `404` if `member` is not a recognized username of any user
+- `403` if the user is not logged in
 
-#### `GET /api/groups/:groupId/members` - Get all members of a group
+#### `GET /api/groups/:groupId` - Get information about a group
 
 **Returns**
 
-- An array of users that are members of the group
+- An object showing the information for the group
 
 **Throws**
 
@@ -364,39 +352,14 @@ This renders the `index.html` file that will be used to interact with the backen
 - `403` if the user is not a member of the group
 - `403` if the user is not logged in
 
-#### `GET /api/groups?admin=USERNAME` - Get all groups that a user is an admin of
+#### `GET /api/groups/admin` - Get all groups that the user is an admin of
 
 **Returns**
 
-- An array of groups that a user with username `admin` is an administrator of
+- An array of groups that the user is an administrator of
 
 **Throws**
 
-- `400` if `admin` is not given
-- `404` if `admin` is not a recognized username of any user
-
-#### `GET /api/groups/:groupId/admin` - Get all administrators of a group
-
-**Returns**
-
-- An array of users that are administrators of the group
-
-**Throws**
-
-- `404` if the groupId is not found
-- `403` if the user is not a member of the group
-- `403` if the user is not logged in
-
-#### `GET /api/groups/:groupId/posts` - Get all posts of a group
-
-**Returns**
-
-- An array of posts within the group sorted in descending order by date modified
-
-**Throws**
-
-- `404` if the groupId is not found
-- `403` if the user is not a member of the group
 - `403` if the user is not logged in
 
 #### `POST /api/groups` - Create a new group
@@ -404,6 +367,7 @@ This renders the `index.html` file that will be used to interact with the backen
 **Body**
 
 - `name` _{string}_ - The group's name
+- `isPrivate` _{boolean}_ - Whether the group is private
 
 **Returns**
 
@@ -422,10 +386,14 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `403` if the user is not logged in
-- `403` if the user is not an administrator of the group
+- `403` if the user is not logged in or the user is not an administrator of the group
+- `404` if the groupId is not found
 
-#### `PUT /api/groups/:groupId/members?member=USERNAME` - Update an existing group with a new member
+#### `PUT /api/groups/:groupId/member` - Update an existing group with a new member
+
+**Body**
+
+- `userId` _{string}_ - The id of the user to add as a group member
 
 **Returns**
 
@@ -435,12 +403,17 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `404` if the groupId is not found
-- `404` if `member` is not a recognized username of any user
-- `400` if `member` is not given
-- `403` if the user is not a member of the group and the group is public or if the user is not an admin of the group and the group is private
-- `403` if the user is not logged in
+- `404` if userId does not belong to an account
+- `400` if userId is not valid
+- `409` if user given by userId is already a member of the group
+- `403` if the current user is not a member of the group
+- `403` if the current user is not logged in
 
-#### `PUT /api/groups/:groupId/admin?admin=USERNAME` - Update an existing group with a new administrator
+#### `PUT /api/groups/:groupId/admin` - Update an existing group with a new administrator
+
+**Body**
+
+- `userId` _{string}_ - The id of the user to add as a group admin
 
 **Returns**
 
@@ -450,13 +423,14 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `404` if the groupId is not found
-- `404` if `admin` is not a recognized username of any user
-- `400` if `admin` is not given
-- `403` if `admin` is not a member of the group
-- `403` if the user is not an admin of the group
-- `403` if the user is not logged in
+- `404` if userId does not belong to an account
+- `400` if userId is not valid
+- `403` if user given by userId is not a member of the group
+- `409` if user given by userId is already an admin of the group
+- `403` if the current user is not an admin of the group
+- `403` if the current user is not logged in
 
-#### `PUT /api/groups/:groupId?private=BOOLEAN` - Update an existing group with a new privacy setting
+#### `PUT /api/groups/:groupId?isPrivate=BOOLEAN` - Update an existing group with a new privacy setting
 
 **Returns**
 
@@ -468,6 +442,27 @@ This renders the `index.html` file that will be used to interact with the backen
 - `404` if the groupId is not found
 - `403` if the user is not an admin of the group
 - `403` if the user is not logged in
+- `400` if the privacy setting is not present
+- `412` if the privacy setting is not valid
+
+#### `PUT /api/groups/:groupId/post` - Update the list of posts to add one
+
+**Body**
+
+- `freetId` _{string}_ - The id of the post to add
+
+**Returns**
+
+- A success message
+- A Group object with the updated list of posts
+
+**Throws**
+
+- `403` if the user is not logged in
+- `403` if the user is not a member of the group
+- `404` if the groupId is not found
+- `404` if the id is empty or there is no freet with that id
+- `409` if the post to add is already in the list
 
 #### `GET /api/font` - Get current font being used
 

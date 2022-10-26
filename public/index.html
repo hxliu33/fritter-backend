@@ -90,15 +90,6 @@
           <input type="submit" value="View Freets By Author">
         </form>
 
-        <form id="view-anonymity-of-freet">
-          <h3>View Freet Anonymity Setting</h3>
-          <div>
-            <label for="id">ID:</label>
-            <input id="id" name="id">
-          </div>
-          <input type="submit" value="View Anonymity Setting">
-        </form>
-
         <form id="create-freet">
           <h3>Create Freet</h3>
           <div>
@@ -229,13 +220,97 @@
           <input type="submit" value="Add Font">
         </form>
 
+        <form id="view-group">
+          <h3>View Group Info</h3>
+          <div>
+            <label for="groupId">Group ID:</label>
+            <input id="groupId" name="groupId">
+          </div>
+          <input type="submit" value="View Group Info">
+        </form>
+
+        <form id="view-member-groups">
+          <h3>View Groups You're a Member Of</h3>
+          <input type="submit" value="View Member Groups">
+        </form>
+
+        <form id="view-admin-groups">
+          <h3>View Groups You're an Admin Of</h3>
+          <input type="submit" value="View Admin Groups">
+        </form>
+
         <form id="create-group">
           <h3>Create Group</h3>
           <div>
-            <label for="name">Name:</label>
-            <input id="name" name="name">
+            <label for="name">Name of Group:</label>
+            <input id="name" name="name"></input>
+          </div>
+          <div>
+            <label for="isPrivate">Privacy Setting (true/false):</label>
+            <input id="isPrivate" name="isPrivate"></input>
           </div>
           <input type="submit" value="Create Group">
+        </form>
+
+        <form id="add-member">
+          <h3>Add Member to Group</h3>
+          <div>
+            <label for="groupId">Group ID:</label>
+            <input id="groupId" name="groupId">
+          </div>
+          <div>
+            <label for="userId">User ID to Add:</label>
+            <input id="userId" name="userId"></input>
+          </div>
+          <input type="submit" value="Add Member">
+        </form>
+
+        <form id="add-admin">
+          <h3>Add Admin to Group</h3>
+          <div>
+            <label for="groupId">Group ID:</label>
+            <input id="groupId" name="groupId">
+          </div>
+          <div>
+            <label for="userId">User ID to Add:</label>
+            <input id="userId" name="userId"></input>
+          </div>
+          <input type="submit" value="Add Admin">
+        </form>
+
+        <form id="add-post">
+          <h3>Add Post to Group</h3>
+          <div>
+            <label for="groupId">Group ID:</label>
+            <input id="groupId" name="groupId">
+          </div>
+          <div>
+            <label for="freetId">Freet ID to Add:</label>
+            <input id="freetId" name="freetId"></input>
+          </div>
+          <input type="submit" value="Add Post">
+        </form>
+
+        <form id="change-privacy">
+          <h3>Edit Group Privacy Setting</h3>
+          <div>
+            <label for="groupId">Group ID:</label>
+            <input id="groupId" name="groupId">
+          </div>
+          <div>
+            <label for="isPrivate">Private (true/false):</label>
+            <input id="isPrivate" name="isPrivate"></input>
+          </div>
+          <input type="submit" value="Edit Group Privacy">
+        </form>
+
+        <form id="delete-group">
+          <h3>Delete Group</h3>
+          <div>
+            <label for="groupId">Group ID:</label>
+            <input id="groupId" name="groupId">
+          </div>
+          <input type="submit" value="Delete Group">
         </form>
       </div>
     </section>

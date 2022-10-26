@@ -13,7 +13,7 @@ export type User = {
   username: string;
   password: string;
   dateJoined: Date;
-  groups?: Array<Types.ObjectId>;
+  groups?: [Types.ObjectId];
 };
 
 // Type definition for User on the backend
@@ -22,7 +22,7 @@ export type PopulatedUser = {
   username: string;
   password: string;
   dateJoined: Date;
-  groups?: Array<Group>;
+  groups?: [Group];
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
